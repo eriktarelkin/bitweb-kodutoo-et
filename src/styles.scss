@@ -1,1 +1,68 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+    --primary-color: #D0E1EE;
+    --primary-color-border:  #337BB5;
+    --success-color: #EAF3EE;
+    --success-color-border:  #599E75;
+    --warning-color: #FFF0CF;
+    --warning-color-border:  #BA830D;
+    --danger-color: #FBECEC;
+    --danger-color-border: #DF6565;
+
+    // Dark mode
+    --primary-dark-color: #004277;
+    --primary-dark-color-border: #4587BC;
+    --success-dark-color: #266B42;
+    --success-dark-color-border: #599E75;
+    --warning-dark-color: #94690D;
+    --warning-dark-color-border: #BA830D;
+    --danger-dark-color: #AC3232;
+    --danger-dark-color-border: #DF6565;
+
+    --text-color: #151926;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  background: #F9F9F9;
+  border-radius: 12px;
+  height: 90vh;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+
+  .button-group {
+    display: flex;
+    gap: 8px;
+
+    .action-btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 16;
+      font-weight: 500;
+      cursor: pointer;
+      color: var(--text-color);
+      transition: transform 0.2s ease, opacity 0.2s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+        opacity: 0.9;
+      }
+
+      &.primary {
+        background: var(--primary-color);
+      }
+      &.success {
+        background: var(--success-color);  
+      }
+      &.warning {
+        background: var(--warning-color);   
+      } 
+      &.danger {
+        background: var(--danger-color); 
+      }
+    }
+  }
+}
