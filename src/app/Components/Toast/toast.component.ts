@@ -13,11 +13,11 @@ export type ToastTitleType = 'h1' | 'div';
 
 export interface Toast {
   id: number;
-  title?: string;
-  description?: string;
+  title: string;
+  description: string;
   type: ToastType;
   icon?: boolean;
-  showClose?: boolean;
+  showClose: boolean;
 }
 
 @Component({

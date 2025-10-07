@@ -1,6 +1,6 @@
 
 <main class="main">
-  <h2 class="title">Click button to call toast</h2>
+  <h1 class="title">Click button to call toast</h1>
   <div class="button-group">
     <button class="action-btn primary" (click)="showPrimary('Primary toast', 'This is the primary toast container!')">Primary</button>
     <button class="action-btn success" (click)="showSuccess('Success toast', 'This is the success toast container!')">Success</button>
@@ -8,11 +8,11 @@
     <button class="action-btn danger" (click)="showDanger('Danger toast', 'This is the danger toast container.')">Danger</button>
   </div>
 </main>
-
 <div class="toast-container">
+  @for (toast of toasts(); track toast.id) {
     <toast
-        *ngFor="let toast of toasts()"
-        [toast]="toast"
-        (remove)="removeToast($event)">
+      [toast]="toast"
+      (remove)="removeToast($event)">
     </toast>
+  }
 </div>
