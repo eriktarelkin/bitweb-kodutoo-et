@@ -6,10 +6,9 @@ import {
   output,
   computed,
 } from '@angular/core';
-import { CommonModule, NgTemplateOutlet } from '@angular/common';
+import { CommonModule } from '@angular/common';
 
 export type ToastType = 'primary' | 'success' | 'warning' | 'danger';
-export type ToastTitleType = 'h1' | 'div';
 
 export interface Toast {
   id: number;
@@ -23,7 +22,7 @@ export interface Toast {
 @Component({
   standalone: true,
   selector: 'toast',
-  imports: [CommonModule, NgTemplateOutlet],
+  imports: [CommonModule],
   templateUrl: './toast.component.html',
   styleUrls: ['./toast.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
