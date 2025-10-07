@@ -1,60 +1,54 @@
-import { Component, NgZone, ChangeDetectorRef, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  ViewEncapsulation,
+  input,
+  output,
+  computed,
+} from '@angular/core';
+import { CommonModule, NgTemplateOutlet } from '@angular/common';
 
-interface Toast {
+export type ToastType = 'primary' | 'success' | 'warning' | 'danger';
+export type ToastTitleType = 'h1' | 'div';
+
+export interface Toast {
   id: number;
-  title: string;
-  description: string;
-  type: 'primary' | 'success' | 'warning' | 'danger';
-  duration?: number;
+  title?: string;
+  description?: string;
+  type: ToastType;
+  icon?: boolean;
+  showClose?: boolean;
 }
 
 @Component({
-  selector: 'toast',
   standalone: true,
-  imports: [CommonModule],
-  templateUrl: './toast.component.html',  // or inline template
-  styleUrls: ['./toast.component.css']    // or inline styles
+  selector: 'toast',
+  imports: [CommonModule, NgTemplateOutlet],
+  templateUrl: './toast.component.html',
+  styleUrls: ['./toast.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class]': 'classes()',
+    '[attr.role]': "'status'",
+  },
 })
 
 export class ToastComponent {
-  toasts: Toast[] = [];
-  private nextId = 0;
+  toast = input<Toast>();
+  remove = output<number>();
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  classes = computed(() => {
+    const t = this.toast();
+    return `toast toast--${t?.type ?? 'primary'}`;
+  });
 
-  show(title: string, description: string, type: Toast['type'], duration = 3000) {
-    console.log('Showing toast:', { title, description, type, duration });
-    const id = this.nextId++;
-    const toast: Toast = { id, title, description, type, duration };
-    this.toasts = [...this.toasts, toast];
- 
-
-    setTimeout(() => {
-    this.toasts = this.toasts.filter(t => t.id !== id);  
-    this.cdr.detectChanges();
-    }, duration);
+  onClose() {
+    const id = this.toast()?.id;
+    if (id != null) this.remove.emit(id);
   }
 
-  trackById(index: number, toast: Toast) {
-    return toast.id;
-  }
-
-   removeToast(id: number) {
-    this.toasts = this.toasts.filter(t => t.id !== id);
-    this.cdr.detectChanges();
-   }
-
-  primary(title: string, description: string, duration?: number) {
-    this.show(title, description, 'primary', duration);
-  }
-  success(title: string, description: string, duration?: number) {
-    this.show(title, description, 'success', duration);
-  }
-  warning(title: string, description: string, duration?: number) {
-    this.show(title, description, 'warning', duration);
-  }
-  danger(title: string, description: string, duration?: number) {
-    this.show(title, description, 'danger', duration);
-  }
+  title = computed(() => this.toast()?.title ?? '');
+  description = computed(() => this.toast()?.description ?? '');
+  showClose = computed(() => !!this.toast()?.showClose);
 }

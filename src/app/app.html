@@ -1,11 +1,18 @@
 
 <main class="main">
-  <h2 class="title">{{ title }}</h2>
-  <toast #toast></toast>
+  <h2 class="title">Click button to call toast</h2>
   <div class="button-group">
-    <button class="action-btn primary" (click)="showPrimary()">Primary</button>
-    <button class="action-btn success" (click)="showSuccess()">Success</button>
-    <button class="action-btn warning" (click)="showWarning()">Warning</button>
-    <button class="action-btn danger" (click)="showDanger()">Danger</button>
+    <button class="action-btn primary" (click)="showPrimary('Primary toast', 'This is the primary toast container!')">Primary</button>
+    <button class="action-btn success" (click)="showSuccess('Success toast', 'This is the success toast container!')">Success</button>
+    <button class="action-btn warning" (click)="showWarning('Warning toast', 'This is the warning toast container!', 620000)">Warning</button>
+    <button class="action-btn danger" (click)="showDanger('Danger toast', 'This is the danger toast container.')">Danger</button>
   </div>
 </main>
+
+<div class="toast-container">
+    <toast
+        *ngFor="let toast of toasts()"
+        [toast]="toast"
+        (remove)="removeToast($event)">
+    </toast>
+</div>

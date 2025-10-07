@@ -1,20 +1,55 @@
-import { Component, ViewChild  } from '@angular/core';
-import { ToastComponent } from './Components/Toast/toast.component';
+import { Component, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ToastComponent, Toast } from './Components/Toast/toast.component';
 
 @Component({
-  selector: 'app-root',
   standalone: true,
-  imports: [ToastComponent],
+  selector: 'app-root',
+  imports: [CommonModule, ToastComponent],
   templateUrl: './app.html',
   styleUrls: ['./app.scss']
 })
 
 export class AppComponent {
-  @ViewChild('toast', { static: true }) toast!: ToastComponent;
-  title = 'Toast component demo';
+  toasts = signal<Toast[]>([]);
+  private nextId = 0;
 
-  showPrimary() { if (this.toast) this.toast.primary('Primary toast', 'This is the primary toast container!'); }
-  showSuccess() { if (this.toast) this.toast.success('Success toast', 'This is the success toast container!'); }
-  showWarning() { if (this.toast) this.toast.warning('Warning toast', 'This is the warning toast container!', 15000); }
-  showDanger() { if (this.toast) this.toast.danger('Danger toast', 'This is the danger toast container.', 1000); }
+  /** Kasutan hetkel iconit kui booleani. Kasutaks string'i kui tuleks suurem vajadus selle jaoks. */
+  showToast(title: string, description: string, type: Toast['type'] = 'primary', duration = 3000, icon: boolean) {
+    const id = this.nextId++;
+    const toast: Toast = {
+      id,
+      title,
+      description,
+      type,
+      icon,
+      showClose: true,
+    };
+
+    this.toasts.update((list) => [...list, toast]);
+
+    setTimeout(() => {
+      this.removeToast(id);
+    }, duration);
+  }
+
+  removeToast(id: number) {
+    this.toasts.update((list) => list.filter((t) => t.id !== id));
+  }
+
+  showPrimary(title: string, description: string, duration?: number) {
+    this.showToast(title, description, 'primary', duration, false);
+  }
+
+  showSuccess(title: string, description: string, duration?: number) {
+    this.showToast(title, description, 'success', duration, false);
+  }
+
+  showWarning(title: string, description: string, duration?: number) {
+    this.showToast(title, description, 'warning', duration, true);
+  }
+
+  showDanger(title: string, description: string, duration?: number) {
+    this.showToast(title, description, 'danger', duration, true);
+  }
 }
